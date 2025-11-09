@@ -124,7 +124,7 @@ def register():
 
 
 @app.get("/get_song/<id>")
-@auth_required
+@auth_required("token")
 @roles_accepted("creator", "general_user")
 def get_song(id):
     song = Song.query.filter_by(id=id).first()
@@ -205,7 +205,7 @@ def current_creator_songs(string):
 
 @app.get("/get_album/<id>")
 @auth_required("token")
-@roles_required("creator")
+@roles_required("creator", "general_user")
 def get_album(id):
     album = Album.query.filter_by(id=id).first()
     songs = [
@@ -737,7 +737,7 @@ def flag(option, id):
 
 
 @app.post("/follow/<id>")
-@auth_required
+@auth_required("token")
 @roles_accepted("creator", "general_user")
 def follow(id):
     artist = User.query.filter_by(id=id).first()
@@ -752,7 +752,7 @@ def follow(id):
 
 
 @app.get("/following_artists")
-@auth_required
+@auth_required("token")
 @roles_accepted("creator", "general_user")
 def following_artists():
     following = current_user.following
@@ -770,7 +770,7 @@ def following_artists():
 
 
 @app.route("/profile", methods=["GET", "POST"])
-@auth_required
+@auth_required("token")
 @roles_accepted("creator", "general_user")
 def profile():
     user = current_user
